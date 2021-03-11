@@ -3,14 +3,17 @@
 
 <head>
   <meta charset="UTF-8">
+  <link rel="shortcut icon" href="https://mzaalo.com/favicon.ico">
 
   <!-- Imporant meta information to make the page as rigid as possible on mobiles, to avoid unintentional zooming on the page itself  -->
   <meta name="viewport"
     content="width=device-width, height=device-height, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
-  <title>Character Tutorial</title>
+  <title>RPM - Mzaalo</title>
   <style>
+    @import url('https://fonts.googleapis.com/css2?family=Nunito+Sans:ital,wght@0,400;0,700;1,400&display=swap');
+
     body,
     html {
       margin: 0;
@@ -33,7 +36,7 @@
       color: white;
       letter-spacing: 2px;
       font-size: 11px;
-      font-family: 'Poppins', sans-serif;
+      font-family: 'Nunito Sans', sans-serif;
       width: 100%;
       height: 100vh;
     }
@@ -126,6 +129,68 @@
       display: block;
       z-index: 1;
     }
+
+    .wolf-3d {
+      position: absolute;
+    z-index: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: auto;
+    height: auto;
+    font-size: 16px;
+    font-weight: 600;
+    color: #7c8495;
+    padding: 10px 10px 6px 6px;
+    bottom: 10px;
+    right: 10px;
+    letter-spacing: 0;
+    text-decoration: none;
+    background: #1013201c;
+    border-radius: 8px;
+    overflow: hidden;
+    backdrop-filter: blur(24px) saturate(1.1);
+    box-shadow: 0 0 2px 0 #1013205e;
+}
+
+.wolf-logo > svg {
+    width: 50px;
+    height: auto;
+    padding: 0 10px;
+}
+
+
+.wolf-logo > svg path{
+   fill: #7c8495;
+}
+.pow-by {
+    font-size: 14px;
+    font-weight: 500;
+    color: #5f667a;
+    line-height: 8px;
+    padding: 1px 0;
+}
+.rpm {
+    text-transform: uppercase;
+}
+
+a.mzaalo {
+    position: absolute;
+    z-index: 1;
+    top: 25px;
+    left: 16px;
+    padding: 6px 8px 2px 8px;
+    /* background: #9d9d9d1c; */
+    /* border-radius: 8px; */
+    overflow: hidden;
+    /* backdrop-filter: blur(24px) saturate(1.1); */
+    /* box-shadow: 0 0 2px 0 #1013205e; */
+}
+
+a.mzaalo > img {
+    width: 100px;
+}
+
   </style>
 </head>
 
@@ -138,7 +203,21 @@
   <div class="wrapper">
     <!-- The canvas element is used to draw the 3D scene -->
     <canvas id="c"></canvas>
-
+    <a href="https://mzaalo.com/" target="_blank" class="mzaalo">
+      <img src="mzaalo.png" alt="Mzaalo">
+    </a>
+    <a class="wolf-3d" href="https://readyplayer.me/" target="_blank">
+      <div class="wolf-logo">
+        <svg width="597" height="777" viewBox="0 0 597 777" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path fill-rule="evenodd" clip-rule="evenodd" d="M0 0V361.89L159.658 149.216L0 0ZM39.925 99.5092L107.215 162.414L39.925 252.089V99.5092ZM196.4 598.961L212.877 505.54L157.507 514.268L112.58 447.041L21.2877 480.654L98.3597 549.201L113.346 599.844L157.507 588.487V670.562L196.4 598.961ZM168.79 351.247L127.726 398.558L223.521 436.397L168.79 351.247ZM596.055 0L436.397 149.216L596.055 361.89V0ZM488.818 162.425L556.151 99.5092V252.089L488.818 162.414V162.425ZM427.925 514.268L372.534 505.54L389.011 598.961L427.925 670.562V588.487L472.075 599.844L487.03 549.201L564.123 480.654L472.831 447.041L427.925 514.268ZM468.329 398.558L427.275 351.247L372.534 436.397L468.329 398.558Z" fill="#444753"/>
+          <path fill-rule="evenodd" clip-rule="evenodd" d="M292.78 200.668H292.621L176.369 180.945L21.2881 410.458L255.442 293.993L234.548 626.273L185.331 693.073L292.706 777L400.081 693.073L350.874 626.273L329.981 293.993L564.124 410.458L409.032 180.945L292.78 200.668ZM232.77 694.436H352.631L292.706 746.399L232.781 694.447L232.77 694.436Z" fill="#444753"/>
+        </svg>
+      </div>
+        <div>
+          <div class="pow-by">Powered by</div>
+          <div class="rpm">readyplayer.me</div>
+        </div>
+      </a>
   </div>
 </body>
 
@@ -163,8 +242,8 @@ function main() {
   const aspect = 2;  // the canvas default
   const near = 0.1;
   const far = 100;
-  const fullbodyMinDist = 0.8
-  const fullbodyMaxDist = 2.5
+  const fMinDist = 0.8
+  const fMaxDist = 2.5
 
   const halfbodyMinDist = 0.5
   const halfbodyMaxDist = 1.2
@@ -195,7 +274,7 @@ function main() {
   spotLight.position.set(5, 25, 20)
   camera.add(spotLight)
 
-  const color = 0xFFFFFF;
+  const color = 0x0089ff;
   const intensity = 5;
   const light = new THREE.DirectionalLight(color, intensity);
   light.position.set(0, 800, -800);
@@ -228,8 +307,8 @@ function main() {
       if(controlsUpdating){
         // console.log("do this");
         let distance = controls.target.distanceTo(camera.position)
-        distance = Clamp(distance, fullbodyMaxDist, fullbodyMinDist)
-        let pivot = (distance - fullbodyMinDist) / (fullbodyMaxDist - fullbodyMinDist)
+        distance = Clamp(distance, fMaxDist, fMinDist)
+        let pivot = (distance - fMinDist) / (fMaxDist - fMinDist)
         controls.target.set(0, fullbodyCamTarget - 0.6 * pivot, 0);
       //  controlsUpdating = false;
       }
@@ -241,87 +320,6 @@ function main() {
 
   // scene.background = null;
 
-  {
-    // const planeSize = 1400;
-
-    // const loader = new THREE.TextureLoader();
-    // const texture = loader.load('texture.png');
-    // texture.wrapS = THREE.RepeatWrapping;
-    // texture.wrapT = THREE.RepeatWrapping;
-    // texture.magFilter = THREE.NearestFilter;
-    // const repeats = planeSize /12;
-    // texture.repeat.set(repeats, repeats);
-
-    // const planeGeo = new THREE.PlaneGeometry(planeSize, planeSize);
-    // const planeMat = new THREE.MeshPhongMaterial({
-    //   map: texture,
-    //   side: THREE.DoubleSide,
-    // });
-    // const mesh = new THREE.Mesh(planeGeo, planeMat);
-    // mesh.rotation.x = Math.PI * -.5;
-    // scene.add(mesh);
-  }
-
-  {
-    // const skyColor = 0xB1E1FF;  // light blue
-    // const groundColor = 0xB97A20;  // brownish orange
-    // const intensity = 1;
-    // const light = new THREE.HemisphereLight(skyColor, groundColor, intensity);
-    // scene.add(light);
-  }
-
-  {
-    // const color = 0xFFFFFF;
-    // const intensity = 5;
-    // const light = new THREE.DirectionalLight(color, intensity);
-    // light.position.set(0, 800, -800);
-    // scene.add(light);
-    // scene.add(light.target);
-  }
-
-  {
-    //  // Add lights
-    // let hemiLight = new THREE.HemisphereLight(0xffffff, 0xffffff, 1.5);
-    // hemiLight.position.set(0, 50, 0);
-    // // Add hemisphere light to scene
-    // scene.add(hemiLight);
-
-    // let d = 8.25;
-    // let dirLight = new THREE.DirectionalLight(0xffffff, 0.54);
-    // dirLight.position.set(-8, 12, 8);
-    // dirLight.castShadow = true;
-    // dirLight.shadow.mapSize = new THREE.Vector2(1024, 1024);
-    // dirLight.shadow.camera.near = 0.1;
-    // dirLight.shadow.camera.far = 1500;
-    // dirLight.shadow.camera.left = d * -1;
-    // dirLight.shadow.camera.right = d;
-    // dirLight.shadow.camera.top = d;
-    // dirLight.shadow.camera.bottom = d * -1;
-    // // Add directional Light to scene
-    // scene.add(dirLight);
-
-    // // Floor
-    // let floorGeometry = new THREE.PlaneGeometry(50, 50, 0, 0);
-    // let floorMaterial = new THREE.MeshPhongMaterial({
-    //   color: 0xFFFFFF,
-    //   shininess: 0
-    // });
-
-    // let floor = new THREE.Mesh(floorGeometry, floorMaterial);
-    // floor.rotation.x = -0.5 * Math.PI;
-    // floor.receiveShadow = true;
-    // floor.position.y = -11;
-    // // scene.add(floor);
-
-    // let geometry = new THREE.SphereGeometry(8, 32, 32);
-    // let material = new THREE.MeshBasicMaterial({ color: 0x9bffaf }); // 0xf2ce2e
-    // let sphere = new THREE.Mesh(geometry, material);
-
-    // sphere.position.z = -15;
-    // sphere.position.y = -2.5;
-    // sphere.position.x = -0.25;
-    // // scene.add(sphere);
-  }
   function frameArea(sizeToFitOnScreen, boxSize, boxCenter, camera) {
     const halfSizeToFitOnScreen = sizeToFitOnScreen * 1;
     const halfFovY = THREE.MathUtils.degToRad(camera.fov * .5);
