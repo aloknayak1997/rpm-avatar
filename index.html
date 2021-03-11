@@ -4,6 +4,12 @@
 <head>
   <meta charset="UTF-8">
   <link rel="shortcut icon" href="https://mzaalo.com/favicon.ico">
+  <!-- Chrome, Firefox OS and Opera -->
+<meta name="theme-color" content="#101320">
+<!-- Windows Phone -->
+<meta name="msapplication-navbutton-color" content="#101320">
+<!-- iOS Safari -->
+<meta name="apple-mobile-web-app-status-bar-style" content="#101320">
 
   <!-- Imporant meta information to make the page as rigid as possible on mobiles, to avoid unintentional zooming on the page itself  -->
   <meta name="viewport"
@@ -142,8 +148,8 @@
     font-weight: 600;
     color: #7c8495;
     padding: 10px 10px 6px 6px;
-    bottom: 10px;
-    right: 10px;
+    bottom: 2rem;
+    right: 2rem;
     letter-spacing: 0;
     text-decoration: none;
     background: #1013201c;
@@ -237,6 +243,7 @@ function main() {
   console.log(canvas);
   const renderer = new THREE.WebGLRenderer({canvas,alpha: true,antialias: true,physicallyCorrectLights:true, autoSize: true });
   renderer.setClearColor( 0x000000, 0 );
+  renderer.setPixelRatio(window.devicePixelRatio);
   renderer.outputEncoding = THREE.sRGBEncoding;
   const fov = 65;
   const aspect = 2;  // the canvas default
@@ -363,7 +370,7 @@ function main() {
       frameArea(boxSize * 1, boxSize, boxCenter, camera);
 
       // update the Trackball controls to handle the new size
-      controls.maxDistance = boxSize * 10;
+      controls.maxDistance = boxSize * 2;
       controls.target.copy(boxCenter);
       controls.update();
     });
