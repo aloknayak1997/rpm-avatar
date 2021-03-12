@@ -18,7 +18,13 @@ function main() {
   controls.target.set(0, 5, 0);
   controls.update();
 
-  const scene = new THREE.Scene();
+      //Create a DirectionalLight and turn on shadows for the light
+    const toplight = new THREE.DirectionalLight( 0x0089ff, 8, 100 );
+    toplight.position.set( -100, 1, 0 ); //default; light shining from top
+    toplight.castShadow = true; // default false
+    camera.add( toplight );
+    
+    const scene = new THREE.Scene();
   scene.background = new THREE.Color('black');
 
   {
@@ -88,6 +94,7 @@ function main() {
   {
     const gltfLoader = new GLTFLoader();
     gltfLoader.load('full_body_avatar_alok.glb', (gltf) => {
+            $('.loading').fadeOut();
       const root = gltf.scene;
       scene.add(root);
 

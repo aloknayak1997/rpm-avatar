@@ -18,6 +18,7 @@
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
   <title>RPM - Mzaalo - Rana</title>
   <link rel="stylesheet" href="../style.css">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 </head>
 
 <body>
@@ -105,8 +106,8 @@ function main() {
   const intensity = 5;
   const light = new THREE.DirectionalLight(color, intensity);
   light.position.set(0, 800, -800);
-  camera.add(light);
-  camera.add(light.target);
+    // camera.add(light);
+  // camera.add(light.target);
 
     // Add lights
     let hemiLight = new THREE.HemisphereLight(0xffffff, 0xffffff, 1.5);
@@ -143,6 +144,12 @@ function main() {
     });
 
 
+        //Create a DirectionalLight and turn on shadows for the light
+    const toplight = new THREE.DirectionalLight( 0x0089ff, 8, 100 );
+    toplight.position.set( -100, 1, 0 ); //default; light shining from top
+    toplight.castShadow = true; // default false
+    camera.add( toplight );
+    
     const scene = new THREE.Scene();
     scene.add(camera)
 
@@ -177,6 +184,7 @@ function main() {
   {
     const gltfLoader = new GLTFLoader();
     gltfLoader.load('../rana_avatar_3_pose.glb', (gltf) => {
+            $('.loading').fadeOut();
       const root = gltf.scene;
       scene.add(root);
 
@@ -186,7 +194,7 @@ function main() {
 
       const boxSize = box.getSize(new THREE.Vector3()).length()/1.8;
       const boxCenter = box.getCenter(new THREE.Vector3());
-      boxCenter.x += 0.05;
+      boxCenter.x -= 0.05;
       // console.log(boxCenter.x);
       // set the camera to frame the box
       frameArea(boxSize * 1, boxSize, boxCenter, camera);
