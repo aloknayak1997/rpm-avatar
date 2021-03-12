@@ -96,7 +96,8 @@ function main() {
       const box = new THREE.Box3().setFromObject(root);
 
       const boxSize = box.getSize(new THREE.Vector3()).length();
-      const boxCenter = box.getCenter(new THREE.Vector3());
+    const boxCenter = box.getCenter(new THREE.Vector3());
+      boxCenter.x += 0.05;
 
       // set the camera to frame the box
       frameArea(boxSize * 0.5, boxSize, boxCenter, camera);

@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="shortcut icon" href="https://mzaalo.com/favicon.ico">
+  <!-- Chrome, Firefox OS and Opera -->
+<meta name="theme-color" content="#1c4577">
+<!-- Windows Phone -->
+<meta name="msapplication-navbutton-color" content="#1c4577">
+<!-- iOS Safari -->
+<meta name="apple-mobile-web-app-status-bar-style" content="#1c4577">
+
+  <!-- Imporant meta information to make the page as rigid as possible on mobiles, to avoid unintentional zooming on the page itself  -->
+  <meta name="viewport"
+    content="width=device-width, height=device-height, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>RPM - Mzaalo - Vishnu</title>
+  <link rel="stylesheet" href="../style.css">
+
+</head>
+
+<body>
+
+  <!-- The loading elem
+     ent overlays all else until the model is loaded, at which point we remove this element from the DOM -->
+  <!-- <div class="loading" id="js-loader"><div class="loader"></div></div> -->
+
+  <div class="wrapper">
+    <!-- The canvas element is used to draw the 3D scene -->
+    <canvas id="c"></canvas>
+    <a href="https://mzaalo.com/" target="_blank" class="mzaalo">
+      <img src="../mzaalo.png" alt="Mzaalo">
+    </a>
+    <a class="wolf-3d" href="https://readyplayer.me/" target="_blank">
+      <div class="wolf-logo">
+        <svg width="597" height="777" viewBox="0 0 597 777" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path fill-rule="evenodd" clip-rule="evenodd" d="M0 0V361.89L159.658 149.216L0 0ZM39.925 99.5092L107.215 162.414L39.925 252.089V99.5092ZM196.4 598.961L212.877 505.54L157.507 514.268L112.58 447.041L21.2877 480.654L98.3597 549.201L113.346 599.844L157.507 588.487V670.562L196.4 598.961ZM168.79 351.247L127.726 398.558L223.521 436.397L168.79 351.247ZM596.055 0L436.397 149.216L596.055 361.89V0ZM488.818 162.425L556.151 99.5092V252.089L488.818 162.414V162.425ZM427.925 514.268L372.534 505.54L389.011 598.961L427.925 670.562V588.487L472.075 599.844L487.03 549.201L564.123 480.654L472.831 447.041L427.925 514.268ZM468.329 398.558L427.275 351.247L372.534 436.397L468.329 398.558Z" fill="#444753"/>
+          <path fill-rule="evenodd" clip-rule="evenodd" d="M292.78 200.668H292.621L176.369 180.945L21.2881 410.458L255.442 293.993L234.548 626.273L185.331 693.073L292.706 777L400.081 693.073L350.874 626.273L329.981 293.993L564.124 410.458L409.032 180.945L292.78 200.668ZM232.77 694.436H352.631L292.706 746.399L232.781 694.447L232.77 694.436Z" fill="#444753"/>
+        </svg>
+      </div>
+        <div>
+          <div class="pow-by">Powered by</div>
+          <div class="rpm">readyplayer.me</div>
+        </div>
+      </a>
+  </div>
+</body>
+
+</html>
+
+<script type="module">
+  import * as THREE from 'https://threejsfundamentals.org/threejs/resources/threejs/r125/build/three.module.js';
+import {OrbitControls} from 'https://threejsfundamentals.org/threejs/resources/threejs/r125/examples/jsm/controls/OrbitControls.js';
+import {GLTFLoader} from 'https://threejsfundamentals.org/threejs/resources/threejs/r125/examples/jsm/loaders/GLTFLoader.js';
+
+function Clamp(value, max, min) {
+    return Math.min(Math.max(min, value), max)
+}
+
+function main() {
+  const canvas = document.querySelector('#c');
+  console.log(canvas);
+  const renderer = new THREE.WebGLRenderer({canvas,alpha: true,antialias: true,physicallyCorrectLights:true, autoSize: true });
+  renderer.setClearColor( 0x000000, 0 );
+  renderer.setPixelRatio(window.devicePixelRatio);
+  renderer.outputEncoding = THREE.sRGBEncoding;
+  const fov = 65;
+  const aspect = 2;  // the canvas default
+  const near = 0.1;
+  const far = 100;
+  const fMinDist = 0.8
+  const fMaxDist = 2.5
+
+  const halfbodyMinDist = 0.5
+  const halfbodyMaxDist = 1.2
+  const halfbodyCamTarget = 0.1
+  const fullbodyCamTarget = 1.6
+  const camera = new THREE.PerspectiveCamera(fov, aspect, near, far);
+  camera.position.set(0, 0, 20);
+  
+
+  var dirLight = new THREE.DirectionalLight()
+  dirLight.intensity = 0.5
+  dirLight.color = new THREE.Color(0xffffff)
+  dirLight.shadow.bias = -0.0001
+  dirLight.shadow.mapSize.height = 2048
+  dirLight.shadow.mapSize.width = 2048
+  dirLight.castShadow = true
+  dirLight.position.set(3,5,0)
+  camera.add(dirLight)
+
+  var ambientLight = new THREE.AmbientLight()
+  ambientLight.intensity = 0
+  camera.add(ambientLight)
+
+  var spotLight = new THREE.SpotLight()
+  spotLight.intensity = 0
+  spotLight.angle = 0.2
+  spotLight.penumbra = 1
+  spotLight.position.set(5, 25, 20)
+  camera.add(spotLight)
+
+  const color = 0x0089ff;
+  const intensity = 5;
+  const light = new THREE.DirectionalLight(color, intensity);
+  light.position.set(0, 800, -800);
+  camera.add(light);
+  camera.add(light.target);
+
+    // Add lights
+    let hemiLight = new THREE.HemisphereLight(0xffffff, 0xffffff, 1.5);
+    hemiLight.position.set(0, 50, 0);
+    // Add hemisphere light to scene
+    camera.add(hemiLight);
+
+    const controls = new OrbitControls(camera, renderer.domElement);
+    controls.target.set(0, 15, 0);
+    controls.enablePan = false;
+    controls.enableZoom = false;
+    controls.enableDamping = false;
+    controls.minDistance = 0.5
+    controls.maxDistance =1.2
+    controls.minPolarAngle = 1.4;
+    controls.maxPolarAngle = 1.4;
+    controls.minZoom = 1.4;
+    // controls.enabled = false;
+    controls.target.set(0, fullbodyCamTarget, 0);
+    controls.update();
+    var controlsUpdating = false;
+
+
+    controls.addEventListener('change', () => {
+      controlsUpdating = true;
+      if(controlsUpdating){
+        // console.log("do this");
+        // let distance = controls.target.distanceTo(camera.position)
+        // distance = Clamp(distance, fMaxDist, fMinDist)
+        // let pivot = (distance - fMinDist) / (fMaxDist - fMinDist)
+        // controls.target.set(0, fullbodyCamTarget - 0.6 * pivot, 0);
+      //  controlsUpdating = false;
+      }
+    });
+
+
+    const scene = new THREE.Scene();
+    scene.add(camera)
+
+  // scene.background = null;
+
+  function frameArea(sizeToFitOnScreen, boxSize, boxCenter, camera) {
+    const halfSizeToFitOnScreen = sizeToFitOnScreen * 1;
+    const halfFovY = THREE.MathUtils.degToRad(camera.fov * .5);
+    const distance = halfSizeToFitOnScreen / Math.tan(halfFovY);
+    // compute a unit vector that points in the direction the camera is now
+    // in the xz plane from the center of the box
+    const direction = (new THREE.Vector3())
+        .subVectors(camera.position, boxCenter)
+        .multiply(new THREE.Vector3(1, 1, 1))
+        .normalize();
+
+    // move the camera to a position distance units way from the center
+    // in whatever direction the camera was from the center already
+    camera.position.copy(direction.multiplyScalar(distance).add(boxCenter));
+
+    // pick some near and far values for the frustum that
+    // will contain the box.
+    camera.near = boxSize / 100;
+    camera.far = boxSize * 100;
+
+    camera.updateProjectionMatrix();
+
+    // point the camera to look at the center of the box
+    camera.lookAt(boxCenter.x, boxCenter.y, boxCenter.z);
+  }
+
+  {
+    const gltfLoader = new GLTFLoader();
+    gltfLoader.load('../vishnu_avatar_3_pose.glb', (gltf) => {
+      const root = gltf.scene;
+      scene.add(root);
+
+      // compute the box that contains all the stuff
+      // from root and below
+      const box = new THREE.Box3().setFromObject(root);
+
+      const boxSize = box.getSize(new THREE.Vector3()).length()/1.8;
+      const boxCenter = box.getCenter(new THREE.Vector3());
+      boxCenter.x -= 0.10;
+
+      // set the camera to frame the box
+      frameArea(boxSize * 1, boxSize, boxCenter, camera);
+
+      // update the Trackball controls to handle the new size
+      controls.maxDistance = boxSize * 2;
+      controls.target.copy(boxCenter);
+      controls.update();
+    });
+  }
+
+  function resizeRendererToDisplaySize(renderer) {
+    const canvas = renderer.domElement;
+    const width = canvas.clientWidth;
+    const height = canvas.clientHeight;
+    const needResize = canvas.width !== width || canvas.height !== height;
+    if (needResize) {
+      renderer.setSize(width, height, false);
+    }
+    return needResize;
+  }
+
+  function render() {
+    if (resizeRendererToDisplaySize(renderer)) {
+      const canvas = renderer.domElement;
+      camera.aspect = canvas.clientWidth / canvas.clientHeight;
+      camera.updateProjectionMatrix();
+    }
+
+    renderer.render(scene, camera);
+
+    requestAnimationFrame(render);
+  }
+
+  requestAnimationFrame(render);
+}
+
+main();
+
+</script>
