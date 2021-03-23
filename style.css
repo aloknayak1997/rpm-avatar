@@ -25,7 +25,7 @@
       font-family: 'Nunito Sans', sans-serif;
       width: 100vw;
       height: 100vh;
-      padding: 1rem 2rem 4rem 2rem;
+      padding: 1rem 0rem;
     }
 
     .wrapper {
@@ -120,6 +120,7 @@
 
     .wolf-3d {
       position: absolute;
+      /* opacity: 0; */
     z-index: 1;
     display: flex;
     align-items: center;
@@ -130,8 +131,8 @@
     font-weight: 600;
     color: #7c8495;
     padding: 10px 10px 6px 6px;
-    bottom: 2rem;
-    right: -1rem;
+    bottom: 1rem;
+    right: -4px;
     letter-spacing: 0;
     text-decoration: none;
     background: #11294512;

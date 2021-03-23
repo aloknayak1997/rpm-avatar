@@ -62,7 +62,7 @@ function Clamp(value, max, min) {
 function main() {
   const canvas = document.querySelector('#c');
   console.log(canvas);
-  const renderer = new THREE.WebGLRenderer({canvas,alpha: true,antialias: true,physicallyCorrectLights:true, autoSize: true });
+  const renderer = new THREE.WebGLRenderer({ preserveDrawingBuffer: true ,canvas,alpha: true,antialias: true,physicallyCorrectLights:true, autoSize: true });
   renderer.setClearColor( 0x000000, 0 );
   renderer.setPixelRatio(window.devicePixelRatio);
   renderer.outputEncoding = THREE.sRGBEncoding;
@@ -125,6 +125,7 @@ function main() {
     controls.minPolarAngle = 1.4;
     controls.maxPolarAngle = 1.4;
     controls.minZoom = 1.4;
+    controls.rotateSpeed = 2.8;
     // controls.enabled = false;
     controls.target.set(0, fullbodyCamTarget, 0);
     controls.update();
@@ -192,7 +193,7 @@ function main() {
       // from root and below
       const box = new THREE.Box3().setFromObject(root);
 
-      const boxSize = box.getSize(new THREE.Vector3()).length()/1.8;
+      const boxSize = box.getSize(new THREE.Vector3()).length()/2.5;
       const boxCenter = box.getCenter(new THREE.Vector3());
       boxCenter.x -= 0.05;
       // console.log(boxCenter.x);
