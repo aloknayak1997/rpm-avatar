@@ -25,7 +25,7 @@ body {
   font-family: 'Nunito Sans', sans-serif;
   width: 100vw;
   height: 100vh;
-  padding: 1rem 0rem;
+  padding: 0rem 0rem;
 }
 
 .wrapper {
@@ -69,22 +69,42 @@ body {
 } */
 
 .loader {
-  height: 100%;
   display: flex;
-  align-items: center;
-  justify-content: center !important;
-  width: 100%;
   flex-direction: column;
-  position: absolute;
-  z-index: 4;
-  top: 0;
-  /* background: #fcfcfca6; */
-  left: 0;
+  align-items: center;
 }
 
-.loader>svg {
+.loader > .load-icon{
+  border-radius: 50%;
+  width: 28px;
+  height: 28px;
+  border: 0.20rem solid rgba(255, 255, 255, 0.2);
+  border-top-color: white;
+  -webkit-animation: spin 1s infinite linear;
+  animation: spin 1s infinite linear;
+}
+
+@-webkit-keyframes spin {
+0% {
+  transform: rotate(0deg);
+}
+100% {
+  transform: rotate(360deg);
+}
+}
+@keyframes spin {
+0% {
+  transform: rotate(0deg);
+}
+100% {
+  transform: rotate(360deg);
+}
+}
+
+/* .loader>svg {
   width: 50px;
   height: 50px;
+  display: none;
 }
 
 .loader > div {
@@ -94,7 +114,7 @@ font-weight: 500;
 width: 65px;
 white-space: nowrap;
 }
-
+*/
 .path {
 stroke-dasharray: 1600;
 stroke-dashoffset: 4000;
@@ -188,9 +208,9 @@ box-shadow: 0 0 2px 0 #1013202b;
 }
 
 .wolf-logo > svg {
-width: 2.4rem;
+width: 2rem;
 height: auto;
-padding: 0 10px;
+padding: 0 8px;
 }
 
 
@@ -198,18 +218,11 @@ padding: 0 10px;
 /* fill: #7c8495; */
 fill:#fff;
 }
-.pow-by {
-font-size: 0.6rem;
-font-weight: 500;
-/* color: #5f667a; */
-color: #fff;
-line-height: 8px;
-padding: 2px 0;
-}
+.pow-by {font-size: 0.5rem;font-weight: 500;/* color: #5f667a; */color: #fff;line-height: 8px;padding: 2px 0;}
 .rpm {
 text-transform: uppercase;
 color: #fff;
-font-size: 0.6rem;
+font-size: 0.5rem;
 }
 
 a.mzaalo {
@@ -235,4 +248,5 @@ width: 100px;
 .wolf-3d {
 bottom: 2rem;
 right: 2rem;
+}
 }
